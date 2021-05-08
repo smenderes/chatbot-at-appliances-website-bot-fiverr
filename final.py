@@ -1,13 +1,12 @@
 from dialogflow_fulfillment import QuickReplies, WebhookClient
 from flask import Flask, request, Response, jsonify , make_response
-#from googleapiclient.discovery import build
-#from google.oauth2 import service_account
+from googleapiclient.discovery import build
+from google.oauth2 import service_account
 import json
 
 app = Flask(__name__)
 
-"""
-SERVICE_ACCOUNT_FILE = 'keys-food.json'
+SERVICE_ACCOUNT_FILE = 'google-sheet-key.json'
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
 creds = None
 creds = service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE, scopes=SCOPES)
@@ -15,7 +14,6 @@ creds = service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_FI
 SAMPLE_SPREADSHEET_ID = '1DxYub7bbxV_h2AR2lAp8aaTyuy52bmKNsKY8nPTHCnw'
 service = build('sheets', 'v4', credentials=creds)
 
-"""
 def handler(agent: WebhookClient) :
     """Handle the webhook request.."""
 
@@ -44,13 +42,23 @@ def handler(agent: WebhookClient) :
         agent.add('Please  give a heads up on what you would like to chat about, by typing it below')
 
     if intent_name == 'user_input':
+        global user_input
         user_input = req.get('queryResult').get('queryText')
         agent.add('Please enter your name and phone # in case we get disconnected')
-        print(user_input)
-
+        
     if intent_name == 'name_number':
         name = req.get('queryResult').get('parameters').get('person').get('name')
         number = req.get('queryResult').get('parameters').get('phone-number')
+        from datetime import datetime, date
+        today = date.today()
+        date = today.strftime("%b-%d-%Y")
+        now = datetime.now()
+        time = now.strftime("%H:%M:%S")
+        sheett= [[date, time, user_input, name, number]]
+        sheet = service.spreadsheets()
+        result = sheet.values().append(spreadsheetId=SAMPLE_SPREADSHEET_ID,range="O_Tacos!A1",valueInputOption="USER_ENTERED", body={"values" : sheett}).execute()
+
+
 
 @app.route('/webhook', methods=['GET', 'POST'])
 def webhook():
