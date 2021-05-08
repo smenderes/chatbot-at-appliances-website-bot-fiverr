@@ -27,14 +27,17 @@ def handler(agent: WebhookClient) :
         agent.add('I am the chatbot of this page. Ready to assist you with anything you need. What would you like to do?')
         agent.add(QuickReplies(quick_replies=['About us','Schedule a repair','Check your order status','Call us','Talk to a live agent']))
 
+    if intent_name == 'About us':
+        agent.add('https://atservicefl.com/#about')
+
+    if intent_name == 'Schedule_a_repair':
+        link1 = 'https://atservicefl.com/appointment-schedule/'
+        agent.add('To schedule an appointment please use the form below and we will be in touch shortly')
+        agent.add(link1)
+
     if intent_name == 'Check_your_order_status':
         link2 = 'https://atservicefl.com/order-status//'
         agent.add('To get a quick update on your order please use the form below')
-        agent.add(link2)
-
-    if intent_name == 'Schedule_a_repair':
-        link2 = 'https://atservicefl.com/appointment-schedule/'
-        agent.add('To schedule an appointment please use the form below and we will be in touch shortly')
         agent.add(link2)
 
     if intent_name == 'call_us':
