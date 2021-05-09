@@ -44,15 +44,12 @@ def handler(agent: WebhookClient) :
         agent.add('Please give a heads up on what you would like to chat about, by typing it below')
 
     if intent_name == 'user_input':
-        global user_concern
         agent.add('In case we get disconnected, kindly give me your name?')
         
     if intent_name == 'name_number':
         name = req.get('queryResult').get('parameters').get('name')
-        #name= agent.context.get('awaiting_user_info').get('name')
         number = req.get('queryResult').get('parameters').get('phone-number') 
-        user_concern = agent.context.get('awaiting_user_info').get('parameters').get('any')[0]
-        print(user_concern)    
+        user_concern = agent.context.get('awaiting_user_info').get('parameters').get('any')[0] 
         from datetime import datetime, date
         today = date.today()
         date = today.strftime("%b-%d-%Y")
