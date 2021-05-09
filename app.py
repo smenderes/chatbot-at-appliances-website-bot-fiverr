@@ -46,11 +46,13 @@ def handler(agent: WebhookClient) :
     if intent_name == 'user_input':
         global user_concern
         agent.add('In case we get disconnected, kindly give me your name?')
-        user_concern = agent.context.get('awaiting_user_info').get('parameters').get('any')[0]
         
     if intent_name == 'name_number':
-        name = req.get('queryResult').get('parameters').get('any')
-        number = req.get('queryResult').get('parameters').get('phone-number')        
+        name = req.get('queryResult').get('parameters').get('name')
+        #name= agent.context.get('awaiting_user_info').get('name')
+        number = req.get('queryResult').get('parameters').get('phone-number') 
+        user_concern = agent.context.get('awaiting_user_info').get('parameters').get('any')[0]
+        print(user_concern)    
         from datetime import datetime, date
         today = date.today()
         date = today.strftime("%b-%d-%Y")
