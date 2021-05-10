@@ -24,6 +24,10 @@ def handler(agent: WebhookClient) :
         agent.add('I am the chatbot of this page. Ready to assist you with anything you need. What would you like to do?')
         agent.add(QuickReplies(quick_replies=['About us','Schedule a repair','Check your order status','Call us','Talk to a live agent']))
 
+    if intent_name== 'hello':
+        agent.add('Please make a choice from the options below')
+        agent.add(QuickReplies(quick_replies=['About us','Schedule a repair','Check your order status','Call us','Talk to a live agent']))
+
     if intent_name == 'About_us':
         agent.add("Hello, visit our website")
         agent.add('https://atservicefl.com/#about')
@@ -44,7 +48,7 @@ def handler(agent: WebhookClient) :
         agent.add('Please give a heads up on what you would like to chat about, by typing it below')
 
     if intent_name == 'user_input':
-        agent.add('In case we get disconnected, kindly give me your name?')
+        agent.add('Please type your name below')
         
     if intent_name == 'name_number':
         name = req.get('queryResult').get('parameters').get('name')
