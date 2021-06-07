@@ -19,27 +19,25 @@ def handler(agent: WebhookClient) :
     req = request.get_json(force=True)
     intent_name = req.get('queryResult').get('intent').get('displayName')
 
-    if intent_name == 'welcome':
+    if intent_name == 'welcome_0':
         agent.add('Hi! Welcome to AT Appliances - your # 1 place for all things your appliance services needs. We’re dedicated to providing you the very best of service repair for your appliances.')
+        agent.add('I am the chatbot of this page. Ready to assist you with anything you need. What would you like to do?')
+        agent.add(QuickReplies(quick_replies=['About us','Schedule a repair','Check your order status','Call us','Talk to a live agent']))
+
+    if intent_name == 'welcome_1':
+        agent.add('Hi! Welcome to ADA Repair - your # 1 place for all things your appliance services needs. We’re dedicated to providing you the very best of service repair for your appliances.')
+        agent.add('I am the chatbot of this page. Ready to assist you with anything you need. What would you like to do?')
+        agent.add(QuickReplies(quick_replies=['About us','Schedule a repair','Check your order status','Call us','Talk to a live agent']))
+
+    if intent_name == 'welcome_2':
+        agent.add('Hi! Welcome to ACCORD Appliances - your # 1 place for all things your appliance services needs. We’re dedicated to providing you the very best of service repair for your appliances.')
         agent.add('I am the chatbot of this page. Ready to assist you with anything you need. What would you like to do?')
         agent.add(QuickReplies(quick_replies=['About us','Schedule a repair','Check your order status','Call us','Talk to a live agent']))
 
     if intent_name== 'hello':
         agent.add('Please make a choice from the options below')
         agent.add(QuickReplies(quick_replies=['About us','Schedule a repair','Check your order status','Call us','Talk to a live agent']))
-
-    if intent_name == 'About_us':
-        agent.add("Hello, visit our website")
-        agent.add('https://atservicefl.com/#about')
-    
-    if intent_name == 'Schedule_a_repair':
-        agent.add('To schedule an appointment please use the form below and we will be in touch shortly')
-        agent.add('https://atservicefl.com/appointment-schedule/')
-
-    if intent_name == 'Check_your_order_status':
-        agent.add('To get a quick update on your order please use the form below')
-        agent.add('https://atservicefl.com/order-status//')
-
+        
     if intent_name == 'call_us':
         agent.add("Hello, Contact us on")
         agent.add('(754) 202-2000') 
@@ -50,7 +48,7 @@ def handler(agent: WebhookClient) :
     if intent_name == 'user_input':
         agent.add('Please type your name below')
         
-    if intent_name == 'name_number':
+    if intent_name == 'name_number_0':
         name = req.get('queryResult').get('parameters').get('name')
         number = req.get('queryResult').get('parameters').get('phone-number') 
         user_concern = agent.context.get('awaiting_user_info').get('parameters').get('any')[0] 
@@ -61,9 +59,40 @@ def handler(agent: WebhookClient) :
         time = now.strftime("%H:%M:%S")
         sheett= [[date, time, user_concern, name, number]]
         sheet = service.spreadsheets()
-        result = sheet.values().append(spreadsheetId=SAMPLE_SPREADSHEET_ID,range="statements",valueInputOption="USER_ENTERED", body={"values" : sheett}).execute()
+        result = sheet.values().append(spreadsheetId=SAMPLE_SPREADSHEET_ID,range="AT_Appliances",valueInputOption="USER_ENTERED", body={"values" : sheett}).execute()
         agent.add("dummy")
         agent.set_followup_event("follow_up_agent")
+
+    if intent_name == 'name_number_1':
+        name = req.get('queryResult').get('parameters').get('name')
+        number = req.get('queryResult').get('parameters').get('phone-number') 
+        user_concern = agent.context.get('awaiting_user_info').get('parameters').get('any')[0] 
+        from datetime import datetime, date
+        today = date.today()
+        date = today.strftime("%b-%d-%Y")
+        now = datetime.now()
+        time = now.strftime("%H:%M:%S")
+        sheett= [[date, time, user_concern, name, number]]
+        sheet = service.spreadsheets()
+        result = sheet.values().append(spreadsheetId=SAMPLE_SPREADSHEET_ID,range="ADA_repair",valueInputOption="USER_ENTERED", body={"values" : sheett}).execute()
+        agent.add("dummy")
+        agent.set_followup_event("follow_up_agent")
+
+    if intent_name == 'name_number_2':
+        name = req.get('queryResult').get('parameters').get('name')
+        number = req.get('queryResult').get('parameters').get('phone-number') 
+        user_concern = agent.context.get('awaiting_user_info').get('parameters').get('any')[0] 
+        from datetime import datetime, date
+        today = date.today()
+        date = today.strftime("%b-%d-%Y")
+        now = datetime.now()
+        time = now.strftime("%H:%M:%S")
+        sheett= [[date, time, user_concern, name, number]]
+        sheet = service.spreadsheets()
+        result = sheet.values().append(spreadsheetId=SAMPLE_SPREADSHEET_ID,range="ACCORD_Appliances",valueInputOption="USER_ENTERED", body={"values" : sheett}).execute()
+        agent.add("dummy")
+        agent.set_followup_event("follow_up_agent")
+
 
 
 @app.route('/webhook', methods=['GET', 'POST'])
